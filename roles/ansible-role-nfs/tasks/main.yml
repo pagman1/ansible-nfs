@@ -1,0 +1,52 @@
+---
+- name: Create directory for NFS data
+  file:
+    path: "{{ path_export }}"
+    state: directory
+
+- name: Install nfs-utils
+  yum:
+    name: nfs-utils
+    service: latest
+
+- name: Enabled nfs server
+  systemd:
+    name: nfs-server
+    enabled: yes
+
+- name: Start nfs server
+  systemd:
+    name: nfs-server
+    state: started
+
+- name: Upload config file
+  template:
+    src: exports.j2
+    dest: /etc/exports
+  notify: restart nfs
+
+- name: Configure Firewalld
+  firewalld:
+    service: mountd
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: Configure Firewalld
+  firewalld:
+    service: nfs
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+- name: Configure Firewalld
+  firewalld: 
+    service: rpc-bind
+    state: enabled
+    permanent: yes
+    immediate: yes
+
+#- name: Copy images
+#  copy: 
+#     src: ./files/
+#     dest:  
