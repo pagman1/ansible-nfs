@@ -1,0 +1,9 @@
+---
+- name: site.yml
+  hosts: all
+  vars:
+    path_export: /data/exports/
+    networks:
+      - 192.168.129.160/24
+  roles:
+    - role: ./ansible-role-nfs
