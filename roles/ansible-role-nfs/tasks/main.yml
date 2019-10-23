@@ -7,7 +7,7 @@
 - name: Install nfs-utils
   yum:
     name: nfs-utils
-    state latest
+    state: latest
 
 - name: Enabled nfs server
   systemd:
